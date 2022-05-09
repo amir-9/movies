@@ -5,7 +5,7 @@ class Movies extends Component {
   state = {
     movies: getMovies(),
   };
-
+// test for blame
   render() {
     let moviesCount = this.state.movies.length;
     if (moviesCount === 0) return <p>there is no movies in database.</p>;
