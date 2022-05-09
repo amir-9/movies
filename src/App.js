@@ -1,5 +1,6 @@
 import "./App.css";
 import Movies from "./components/Movies";
+// import Pagination from "./components/paigination";
 
 function App() {
   return (
