@@ -1,41 +1,26 @@
-import { Component } from "react";
 import { getGenres } from "../services/fakeGenreService";
-import _ from "lodash";
-class Filter extends Component {
-  // state = {  }
 
-  render() {
-    const { movies, onClickHandler, currentGenre } = this.props;
-    const allGenres = getGenres();
-    console.log(allGenres);
-    return (
-      <ul className="list-group font-size-14">
+function Filter(props) {
+  const { onClickHandler, currentGenre } = props;
+
+  const allGenres = [{ name: "All Genres" }, ...getGenres()];
+  return (
+    <ul className="list-group font-size-14">
+      {allGenres.map((genre) => (
         <li
+          key={genre.name}
           className={
-            currentGenre === "All"
+            currentGenre === genre.name
               ? "list-group-item active"
               : "list-group-item"
           }
-          onClick={() => onClickHandler("All")}
+          onClick={() => onClickHandler(genre.name)}
         >
-          All Genre
+          {genre.name}
         </li>
-        {allGenres.map((genre) => (
-          <li
-            key={genre._id}
-            className={
-              currentGenre === genre.name
-                ? "list-group-item active"
-                : "list-group-item"
-            }
-            onClick={() => onClickHandler(genre.name)}
-          >
-            {genre.name}
-          </li>
-        ))}
-      </ul>
-    );
-  }
+      ))}
+    </ul>
+  );
 }
 
 export default Filter;

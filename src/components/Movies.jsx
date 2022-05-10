@@ -4,24 +4,22 @@ import Like from "../common/Like";
 import Pagination from "./Pagination";
 import Paginate from "../utils/Paginate";
 import Filter from "./Filter";
+import FilterByGenre from "../utils/Filter";
 class Movies extends Component {
   state = {
     movies: getMovies(),
     pageSize: 4,
     currentPageNumber: 1,
-    currentGenre: "All",
+    currentGenre: "All Genres",
+    filteredMovies: getMovies(),
   };
 
   render() {
-    const moviesCount = this.state.movies.length;
-    const {
-      pageSize,
-      currentPageNumber,
-      movies: allMovies,
-      currentGenre,
-    } = this.state;
+    const moviesCount = this.state.filteredMovies.length;
+    const { pageSize, currentPageNumber, currentGenre, filteredMovies } =
+      this.state;
     if (moviesCount === 0) return <p>there is no movies in database.</p>;
-    const movies = Paginate(allMovies, pageSize, currentPageNumber);
+    const movies = Paginate(filteredMovies, pageSize, currentPageNumber);
     return (
       <React.Fragment>
         <p className="mt-3">
@@ -31,7 +29,6 @@ class Movies extends Component {
         <div className="row">
           <div className="col-3">
             <Filter
-              movies={allMovies}
               currentGenre={currentGenre}
               onClickHandler={this.filterClickHandler}
             />
@@ -107,7 +104,11 @@ class Movies extends Component {
     this.setState({ currentPageNumber: number });
   };
   filterClickHandler = (genre) => {
+    this.setState({ currentPageNumber: 1 });
     this.setState({ currentGenre: genre });
+    this.setState({
+      filteredMovies: FilterByGenre(this.state.movies, genre),
+    });
   };
 }
 
