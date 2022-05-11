@@ -5,6 +5,7 @@ import Pagination from "./Pagination";
 import Paginate from "../utils/Paginate";
 import Filter from "./Filter";
 import FilterByGenre from "../utils/Filter";
+import CountMoviesInDatabase from "./CountMoviesInDatabase";
 class Movies extends Component {
   state = {
     movies: getMovies(),
@@ -22,13 +23,7 @@ class Movies extends Component {
     const movies = Paginate(filteredMovies, pageSize, currentPageNumber);
     return (
       <React.Fragment>
-        <p className="mt-3">
-          {moviesCount === 0 && "there is no movies in database."}
-          {moviesCount !== 0 &&
-            `there ${moviesCount === 1 ? "is" : "are"} ${moviesCount} ${
-              moviesCount === 1 ? "movie" : "movies"
-            } in database.`}
-        </p>
+        <CountMoviesInDatabase moviesCount={moviesCount} />
         <div className="row">
           <div className="col-3">
             <Filter
