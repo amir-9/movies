@@ -55,9 +55,12 @@ class Movies extends Component {
       (m) => m._id !== movie._id
     );
     this.setState({ filteredMovies });
-    // if (this.state.filteredMovies.length % this.state.pageSize === 1) {
-    //   this.setState({ currentPageNumber: this.state.currentPageNumber - 1 });
-    // }
+    if (
+      filteredMovies.length ===
+      this.state.pageSize * (this.state.currentPageNumber - 1)
+    ) {
+      this.setState({ currentPageNumber: this.state.currentPageNumber - 1 });
+    }
   };
   clickHandler = (movie) => {
     const movies = this.state.movies;
