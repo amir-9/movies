@@ -19,6 +19,7 @@ class Movies extends Component {
     const { pageSize, currentPageNumber, currentGenre, filteredMovies } =
       this.state;
     if (moviesCount === 0) return <p>there is no movies in database.</p>;
+    console.log(currentPageNumber);
     const movies = Paginate(filteredMovies, pageSize, currentPageNumber);
     return (
       <React.Fragment>
@@ -90,8 +91,16 @@ class Movies extends Component {
     );
   }
   deleteMovieHandler(movie) {
-    let movies = this.state.movies.filter((m) => m._id !== movie._id);
-    this.setState({ movies: movies });
+    const movies = this.state.movies.filter((m) => m._id !== movie._id);
+    this.setState({ movies });
+    const filteredMovies = this.state.filteredMovies.filter(
+      (m) => m._id !== movie._id
+    );
+    this.setState({ filteredMovies });
+    console.log(filteredMovies);
+    if (this.state.filteredMovies.length % this.state.pageSize === 1) {
+      this.setState({ currentPageNumber: this.state.currentPageNumber - 1 });
+    }
   }
   clickHandler = (movie) => {
     const movies = this.state.movies;
