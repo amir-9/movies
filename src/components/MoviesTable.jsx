@@ -1,16 +1,21 @@
 import Like from "../common/Like";
 const MoviesTable = (props) => {
-  const { movies ,onDelete,onClick} = props;
+  const { movies, onDelete, onClick, onSort, tableHeaders } = props;
   return (
     <table className="table">
       <thead>
         <tr>
-          <th scope="col">Title</th>
-          <th scope="col">Genre</th>
-          <th scope="col">Stock</th>
-          <th scope="col">Rate</th>
-          <th scope="col"></th>
-          <th scope="col"></th>
+          {tableHeaders.map((header, index) => (
+            <th
+              key={index}
+              onClick={() => {
+                onSort(header);
+              }}
+              scope="col"
+            >
+              {header.name}
+            </th>
+          ))}
         </tr>
       </thead>
       <tbody>

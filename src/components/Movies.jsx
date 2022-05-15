@@ -6,21 +6,41 @@ import Paginate from "../utils/Paginate";
 import Filter from "./Filter";
 import FilterByGenre from "../utils/Filter";
 import CountMoviesInDatabase from "./CountMoviesInDatabase";
+import Sort from "../utils/sort";
+
 class Movies extends Component {
+  tableHeaders = [
+    { name: "Title", path: "title" },
+    { name: "Genre", path: "genre.name" },
+    { name: "Stock", path: "numberInStock" },
+    { name: "Rate", path: "dailyRentalRate" },
+    { name: "" },
+    { name: "" },
+  ];
+
   state = {
-    movies: getMovies(),
-    pageSize: 4,
-    currentPageNumber: 1,
-    currentGenre: "All Genres",
+    allMovies: getMovies(),
     filteredMovies: getMovies(),
+    sortedMovies: Sort("", getMovies()),
+    currentGenre: "All Genres",
+    currentPageNumber: 1,
+    pageSize: 4,
+    orderBy: "title",
+    orderType: "acs",
   };
 
   render() {
     const moviesCount = this.state.filteredMovies.length;
-    const { pageSize, currentPageNumber, currentGenre, filteredMovies } =
-      this.state;
-
-    const movies = Paginate(filteredMovies, pageSize, currentPageNumber);
+    const {
+      pageSize,
+      currentPageNumber,
+      currentGenre,
+      filteredMovies,
+      orderBy,
+      orderType,
+    } = this.state;
+    const sortedMovies = Sort(orderBy, filteredMovies, orderType);
+    const movies = Paginate(sortedMovies, pageSize, currentPageNumber);
     return (
       <React.Fragment>
         <CountMoviesInDatabase moviesCount={moviesCount} />
@@ -34,8 +54,10 @@ class Movies extends Component {
           <div className="col-9">
             <MoviesTable
               movies={movies}
+              tableHeaders={this.tableHeaders}
               onDelete={this.deleteMovieHandler}
-              onClick={this.clickHandler}
+              onClick={this.likeClickHandler}
+              onSort={this.sortClickHandler}
             />
             <Pagination
               pageSize={pageSize}
@@ -49,8 +71,8 @@ class Movies extends Component {
     );
   }
   deleteMovieHandler = (movie) => {
-    const movies = this.state.movies.filter((m) => m._id !== movie._id);
-    this.setState({ movies });
+    const allMovies = this.state.allMovies.filter((m) => m._id !== movie._id);
+    this.setState({ allMovies });
     const filteredMovies = this.state.filteredMovies.filter(
       (m) => m._id !== movie._id
     );
@@ -62,11 +84,11 @@ class Movies extends Component {
       this.setState({ currentPageNumber: this.state.currentPageNumber - 1 });
     }
   };
-  clickHandler = (movie) => {
-    const movies = this.state.movies;
-    const index = movies.indexOf(movie);
-    movies[index].isLiked = !movies[index].isLiked;
-    this.setState({ movies });
+  likeClickHandler = (movie) => {
+    const allMovies = this.state.allMovies;
+    const index = allMovies.indexOf(movie);
+    allMovies[index].isLiked = !allMovies[index].isLiked;
+    this.setState({ allMovies });
   };
   paginationClickHandler = (e, number) => {
     e.preventDefault();
@@ -76,8 +98,15 @@ class Movies extends Component {
     this.setState({ currentPageNumber: 1 });
     this.setState({ currentGenre: genre });
     this.setState({
-      filteredMovies: FilterByGenre(this.state.movies, genre),
+      filteredMovies: FilterByGenre(this.state.allMovies, genre),
     });
+  };
+  sortClickHandler = (header) => {
+    if (header.path === this.state.orderBy) {
+      const orderType = this.state.orderType === "acs" ? "desc" : "acs";
+      this.setState({ orderType });
+    }
+    this.setState({ orderBy: header.path });
   };
 }
 
