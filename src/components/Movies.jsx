@@ -28,6 +28,13 @@ class Movies extends Component {
     orderBy: "title",
     orderType: "acs",
   };
+  // componentDidMount() {
+  //   this.setState(
+  //     { allMovies: getMovies() },
+  //     { filteredMovies: getMovies() },
+  //     { sortedMovies: Sort("", getMovies()) }
+  //   );
+  // }
 
   render() {
     const moviesCount = this.state.filteredMovies.length;
