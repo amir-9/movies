@@ -26,7 +26,7 @@ class Movies extends Component {
     currentPageNumber: 1,
     pageSize: 4,
     orderBy: "title",
-    orderType: "acs",
+    orderType: "asc",
   };
   // componentDidMount() {
   //   this.setState(
@@ -65,6 +65,8 @@ class Movies extends Component {
               onDelete={this.deleteMovieHandler}
               onClick={this.likeClickHandler}
               onSort={this.sortClickHandler}
+              orderBy={orderBy}
+              orderType={orderType}
             />
             <Pagination
               pageSize={pageSize}
@@ -109,8 +111,9 @@ class Movies extends Component {
     });
   };
   sortClickHandler = (header) => {
+    if (!header.path) return null;
     if (header.path === this.state.orderBy) {
-      const orderType = this.state.orderType === "acs" ? "desc" : "acs";
+      const orderType = this.state.orderType === "asc" ? "desc" : "asc";
       this.setState({ orderType });
     }
     this.setState({ orderBy: header.path });

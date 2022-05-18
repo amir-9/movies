@@ -1,12 +1,57 @@
-import TableBody from "./TableBody";
-import TableHeader from "./TableHeader";
+import Table from "./table";
+import Like from "../common/Like";
+
 const MoviesTable = (props) => {
-  const { movies, onDelete, onClick, onSort, tableHeaders } = props;
+  const columns = [
+    { path: "title", label: "Title" },
+    { path: "genre.name", label: "Title" },
+    { path: "numberInStock", label: "Title" },
+    { path: "dailyRentalRate", label: "Title" },
+    {
+      key: "like",
+      content: (movie) => (
+        <Like
+          onClick={() => {
+            onClick(movie);
+          }}
+          liked={movie.isLiked}
+        />
+      ),
+    },
+    {
+      key: "delete",
+      content: (movie) => (
+        <button
+          id={movie._id}
+          onClick={() => {
+            onDelete(movie);
+          }}
+          className="btn btn-danger btn-sm"
+        >
+          delete
+        </button>
+      ),
+    },
+  ];
+
+  const {
+    movies,
+    onDelete,
+    onClick,
+    onSort,
+    tableHeaders,
+    orderBy,
+    orderType,
+  } = props;
   return (
-    <table className="table">
-      <TableHeader onSort={onSort} tableHeaders={tableHeaders} />
-      <TableBody movies={movies} onClick={onClick} onDelete={onDelete} />
-    </table>
+    <Table
+      movies={movies}
+      onSort={onSort}
+      tableHeaders={tableHeaders}
+      orderBy={orderBy}
+      orderType={orderType}
+      columns={columns}
+    />
   );
 };
 

@@ -3,6 +3,11 @@ class TableHeader extends React.Component {
   sortClickHandler = (header) => {
     this.props.onSort(header);
   };
+  sortIcon = (column) => {
+    return column.path === this.props.orderBy ? (
+      <i className={"fa fa-sort-" + this.props.orderType} />
+    ) : null;
+  };
   render() {
     const { tableHeaders } = this.props;
     return (
@@ -10,13 +15,15 @@ class TableHeader extends React.Component {
         <tr>
           {tableHeaders.map((header, index) => (
             <th
+              className={header.path && "clickable"}
               key={index}
               onClick={() => {
                 this.sortClickHandler(header);
               }}
               scope="col"
             >
-              {header.name}
+              {header.name + " "}
+              {this.sortIcon(header)}
             </th>
           ))}
         </tr>
