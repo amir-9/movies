@@ -7,10 +7,13 @@ import Filter from "./Filter";
 import FilterByGenre from "../utils/Filter";
 import CountMoviesInDatabase from "./CountMoviesInDatabase";
 import Sort from "../utils/sort";
-
+import { Outlet } from "react-router-dom";
 class Movies extends Component {
   tableHeaders = [
-    { name: "Title", path: "title" },
+    {
+      name: "Title",
+      path: "title",
+    },
     { name: "Genre", path: "genre.name" },
     { name: "Stock", path: "numberInStock" },
     { name: "Rate", path: "dailyRentalRate" },
@@ -28,28 +31,23 @@ class Movies extends Component {
     orderBy: "title",
     orderType: "asc",
   };
-  // componentDidMount() {
-  //   this.setState(
-  //     { allMovies: getMovies() },
-  //     { filteredMovies: getMovies() },
-  //     { sortedMovies: Sort("", getMovies()) }
-  //   );
-  // }
-
-  render() {
+  getSortedData = () => {
     const moviesCount = this.state.filteredMovies.length;
-    const {
-      pageSize,
-      currentPageNumber,
-      currentGenre,
-      filteredMovies,
-      orderBy,
-      orderType,
-    } = this.state;
+    const { pageSize, currentPageNumber, filteredMovies, orderBy, orderType } =
+      this.state;
     const sortedMovies = Sort(orderBy, filteredMovies, orderType);
     const movies = Paginate(sortedMovies, pageSize, currentPageNumber);
+    return { movies, moviesCount };
+  };
+  render() {
+    const { pageSize, currentPageNumber, currentGenre, orderBy, orderType } =
+      this.state;
+    const { movies, moviesCount } = this.getSortedData();
     return (
       <React.Fragment>
+        
+        <Outlet />
+
         <CountMoviesInDatabase moviesCount={moviesCount} />
         <div className="row">
           <div className="col-3">

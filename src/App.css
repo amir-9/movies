@@ -4,3 +4,11 @@
 .clickable {
   cursor: pointer;
 }
+.nav-items {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+li {
+  list-style: none;
+}
